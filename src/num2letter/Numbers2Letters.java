@@ -10,6 +10,14 @@ public class Numbers2Letters {
 	};
 	
 	public static void main(String[] args) {
+		
+		if(args.length > 0) {
+			for (String arg : args) {
+				System.out.printf("%s: %s\n", arg, convert(Integer.parseInt(arg)));
+			}
+			System.exit(0);
+		}
+		
 		Scanner keyb = new Scanner(System.in);
 		System.out.print("Please provide your number (0-9): ");
 		
@@ -24,9 +32,52 @@ public class Numbers2Letters {
 	}
 
 	private static String convert(int number) {
-		if (isSimpleNumber(number)) return toSimpleNumber(number);
+		if (isSimpleNumber(number)) return parseSimpleNumber(number);
+		return parseCompoundNumber(number);
+	}
+	
+	private static String parseCompoundNumber(int number) {
+		if (number < 100) return lessThan100(number);
+		
 		return "";
 	}
+	
+	private static String lessThan100(int number) {
+		int theThen = (number / 10) * 10;
+		int theUnit = number - theThen;
+		String link = theUnit == 1 ? " et " : "-";
+		try {
+			return parseSimpleNumber(theThen)+link+parseSimpleNumber(theUnit);			
+		} catch (IllegalArgumentException e) {
+			return switch (theThen) {
+				case 70 -> handleThe70s(number); 
+				case 80 -> handleThe80s(number); 
+				case 90 -> handleThe90s(number);
+				default -> throw new IllegalArgumentException("Unexpected value: " + theThen); 
+			};
+		}
+	}
+	
+	private static String handleThe70s(int number) {
+		int theUnit = number - 70;
+		int theThen = 60;
+		String link = theUnit == 1 ? " et " : "-";
+		return parseSimpleNumber(theThen)+link+convert(theUnit+10);
+	}
+	
+	private static String handleThe80s(int number) {
+		int theUnit = number - 80;
+		String theThen = "quatre-vingt";
+		if (theUnit == 0) return theThen+"s";
+		return theThen+"-"+convert(theUnit);
+	}
+	
+	private static String handleThe90s(int number) {
+		int theUnit = number - 90;
+		String theThen = "quatre-vingt";
+		return theThen+"-"+convert(theUnit+10);	
+	}
+	
 	
 	private static boolean isSimpleNumber(int number) {
 		return switch (number) {
@@ -35,7 +86,7 @@ public class Numbers2Letters {
 		};
 	}
 	
-	private static String toSimpleNumber(int number) {
+	private static String parseSimpleNumber(int number) {
 		return switch (number) {
 			case 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16 ->  simpleNumbers[number];
 			case 20 -> simpleNumbers[17];

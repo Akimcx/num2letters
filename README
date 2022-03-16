@@ -1,0 +1,7 @@
+# Convert number to letters in french
+
+## Getting started
+```java
+javac Numbers2Letters.java
+java Numbers2Letters num
+```
