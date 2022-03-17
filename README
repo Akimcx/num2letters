@@ -1,5 +1,6 @@
 # Convert number to letters in french
 
+Convert numbers to their letter form in french
 ## Getting started
 ```java
 javac Numbers2Letters.java

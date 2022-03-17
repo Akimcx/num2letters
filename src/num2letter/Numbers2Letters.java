@@ -11,12 +11,10 @@ public class Numbers2Letters {
 	
 	public static void main(String[] args) {
 		
-		if(args.length > 0) {
-			for (String arg : args) {
-				System.out.printf("%s: %s\n", arg, convert(Integer.parseInt(arg)));
-			}
-			System.exit(0);
+		for (int i = 0; i <= 999; i++) {
+			System.out.printf("%d: %s\n", i, convert(i));
 		}
+		System.exit(0);
 		
 		Scanner keyb = new Scanner(System.in);
 		System.out.print("Please provide your number (0-9): ");
@@ -38,8 +36,12 @@ public class Numbers2Letters {
 	
 	private static String parseCompoundNumber(int number) {
 		if (number < 100) return lessThan100(number);
-		
-		return "";
+		int theUndred = number / 100;
+		int theRest = number - (theUndred * 100);
+		if (theRest == 0) {
+			return parseSimpleNumber(theUndred) + " cents";
+		}
+		return parseSimpleNumber(theUndred) + " cent " + convert(theRest);
 	}
 	
 	private static String lessThan100(int number) {
